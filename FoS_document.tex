@@ -1,28 +1,18 @@
 \documentclass[conference]{IEEEtran}
 
+% ====== Packages ======
 \usepackage[T1]{fontenc}
-\usepackage{lipsum}
-\usepackage{graphicx}
-\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsfonts}
 \usepackage{url}
-\usepackage{array}
-\usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{tabularx}
-\usepackage{verbatim}
-\usepackage{listings}
-\usepackage{hyperref}
+\usepackage{graphicx}
 
-\hypersetup{
-  colorlinks=true,
-  linkcolor=black,
-  urlcolor=blue,
-  citecolor=black
+% ====== Title / Authors ======
+\title{FoS (Focus on Speaking)\\[0.3em]
+\large Potato Savior\\[0.3em]
+\normalsize\url{https://github.com/april2901/ai-assistant-for-presentation}
 }
-
-\title{FoS (Focus on Speaking)}
-
-\author{
+\author{%
 \IEEEauthorblockN{Sangyoon Kwon}
 \IEEEauthorblockA{Department of Computer Science\\
 Backend Development\\
@@ -60,298 +50,273 @@ Seoul, Republic of Korea\\
 jmh12230@hanyang.ac.kr}
 }
 
-\begin{document}
-
-\maketitle
-
+% ====== IEEE pubid (bottom left) ======
 \IEEEpubid{XXX-X-XXXX-XXXX-X/XX/\$XX.00~\copyright~2025 IEEE}
 
-\begin{center}
-Potato Savior\\[2pt]
-\url{https://github.com/SWE-FoS}
-\end{center}
+\begin{document}
+\maketitle
+\thispagestyle{plain}
+\pagestyle{plain}
+
 
 \begin{abstract}
 In modern business and educational environments, meetings and presentations are key means of communication, and their importance continues to grow. However, presenters and participants often experience cognitive overload as they manage speech delivery, script reference, slide transitions, and time management while also trying to follow complex discussion flows and decisions. This leads to topic drift, loss of focus, and unclear outcomes. To address these issues, this project proposes an LG display--linked real-time meeting AI prompter that extends a traditional teleprompter into an active, context-aware assistant. The system listens to participants' speech, interprets the meeting context in real time, and presents the next required information---such as agenda structure, current topic, decisions, and action items---on LG displays, while providing a private coaching dashboard for the presenter or host. Core features include real-time STT, flexible speech-to-script matching, keyword omission detection, a real-time feedback dashboard, agenda visualization, decision and action-item extraction, and fact-check widgets. A Meeting Summary Report summarizes key topics, ideas, decisions, and action items after the session. Through these functions, the project aims to improve both individual presentation quality and overall meeting efficiency, and to explore integration within LG's smart office ecosystem.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Speech Recognition, Real-Time STT, Script Synchronization, Real-Time Teleprompter, Slide Automation, Agenda Tracking, Presentation Feedback, Human--Computer Interaction, Meeting Intelligence
+Speech Recognition, Real-Time STT, Script Synchronization, Real-Time Teleprompter, Slide Automation, Agenda Tracking, Presentation Feedback, Human-Computer Interaction, Meeting Intelligence
 \end{IEEEkeywords}
 
+%========================
 \section{Role Assignment}
 
-\begin{table}[!t]
+\begin{table}[ht]
+\caption{Role Assignment}
 \centering
-\caption{Role assignment}
-\renewcommand{\arraystretch}{1.1}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{1.4cm}%
-                                  >{\raggedright\arraybackslash}p{2.0cm}%
-                                  >{\raggedright\arraybackslash}X}
-\toprule
-Role & Name & Task description and etc. \\
-\midrule
-User & Daeun Lee, Minhyuk Jang &
-Tests the prototype from the user's perspective, focusing on interface usability, speech synchronization accuracy, and overall user experience. Provides qualitative feedback for refinement. \\
-\midrule
-Customer (Assumed Client) & LG Electronics &
-Defines requirements for smart office presentation support software and evaluates its feasibility for integration with LG's webOS-based business ecosystem. \\
-\midrule
-Software Developer & Sangyoon Kwon, Dohoon Kim (Backend), Hyeyun Kwon, Seohyun Kim (Frontend) &
-Responsible for system implementation including backend server logic, database management, API communication, and frontend interface development. Ensures real-time synchronization and stable slide automation. \\
-\midrule
-Development Manager \& UI Designer & Daeun Lee, Minhyuk Jang &
-Oversees project planning, documentation, and communication between development teams. Manages task allocation, schedule tracking, design of interface and quality assurance. \\
-\bottomrule
-\end{tabularx}
+\begin{tabular}{p{0.18\linewidth} p{0.22\linewidth} p{0.50\linewidth}}
+\hline
+Role & Name & Task description and etc.\\
+\hline
+User & Daeun Lee, Minhyuk Jang & Tests the prototype from the user's perspective, focusing on interface usability, speech synchronization accuracy, and overall user experience. Provides qualitative feedback for refinement.\\[0.3em]
+Assumed Client (Customer) & LG Electronics & Defines requirements for smart office presentation support software and evaluates its feasibility for integration with LG's webOS-based business ecosystem.\\[0.3em]
+Software Developer & Sangyoon Kwon, Dohoon Kim (Backend), Hyeyun Kwon, Seohyun Kim (Frontend) & Responsible for system implementation including backend server logic, database management, API communication, and frontend interface development. Ensures real-time synchronization and stable slide automation.\\[0.3em]
+Development Manager \& UI Designer & Daeun Lee, Minhyuk Jang & Oversees project planning, documentation, and communication between development teams. Manages task allocation, schedule tracking, design of interface, and quality assurance.\\
+\hline
+\end{tabular}
 \end{table}
 
+%========================
 \section{Introduction}
 
 \subsection{Challenges in Modern Presentations and Meetings}
-
 In professional and academic settings, presentations and meetings have become essential tools for sharing ideas and making decisions. Yet presenters and facilitators must simultaneously handle speech delivery, script reference, slide transitions, and time tracking, while participants struggle to follow complex discussion flows and remember key points. This often causes interruptions in the presentation flow, omission of important content, topic drift during discussions, and unclear conclusions, ultimately reducing communication efficiency.
 
 \subsection{Limitations of Existing Solutions}
-
 Existing tools such as teleprompters, timers, and subtitle features mainly provide static information or simple transcription. They are useful for displaying text but do not actively intervene in real time to prevent topic drift or support decision alignment. Many AI-based meeting services focus on post-meeting summaries or minutes, which help review what happened but do not improve the efficiency of the meeting while it is in progress. As a result, core issues such as cognitive overload and live meeting inefficiency remain unresolved.
 
 \subsection{Project Goals and Proposed Solution}
-
 This project proposes an integrated support system that covers preparation, live delivery, and post-meeting feedback. The core concept is an ``LG Display--Linked Real-Time Meeting AI Prompter.'' The system continuously listens to meeting audio, analyzes the semantic context of each utterance, and surfaces what the meeting needs next: agenda structure, current topic, decisions, action items, and fact-check results. At the same time, it provides a private teleprompter and coaching dashboard for the presenter or host, helping with script tracking, omission alerts, pacing, and gesture suggestions. The ultimate goal is to reduce cognitive load and improve meeting focus and decision-making speed.
 
 \subsection{Dual-Screen Architecture for LG Displays}
-
 To support both individual coaching and shared awareness, the system adopts a dual-screen architecture. Screen~1 (Presenter Dashboard) is shown on the presenter's personal device (e.g., LG Gram) and provides a private teleprompter, omission alerts, pace metrics, and AI suggestions. Screen~2 (Shared Meeting Board) is shown on LG signage, LG One:Quick, or conference room TVs and visualizes slides, the real-time agenda map, decisions and action items, and fact-check widgets for all participants. This separation allows the presenter to receive rich guidance without overwhelming the audience, while participants share a clear view of where the meeting is and what has been decided.
 
+%========================
 \section{Requirements}
 
 \subsection{Before Presentation}
-
 This phase focuses on the preparation process before a presenter begins their presentation. Users interact with the system to upload materials, create a script, and adjust content to fit the presentation environment.
 
-\subsubsection{Slide--Script Alignment Recognition and Consulting}
-
+\subsubsection{Slide-Script Alignment Recognition and Consulting}
 When a user uploads a PPTX or PDF file, the system extracts textual and visual elements using \texttt{python-pptx} and the Google Vision API (OCR). A multimodal LLM processes these elements to interpret textual and graphical contexts, generating a coherent draft script for each slide.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item OCR text recognition accuracy $\geq 95\%$
-\item Draft script grammatical accuracy $\geq 95\%$
-\item Slide--text coherence $\geq 95\%$
+\item OCR text recognition accuracy $\geq 95\%$.
+\item Draft script grammatical accuracy $\geq 95\%$.
+\item Slide--text coherence $\geq 95\%$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Presentation file (.pptx, .pdf)
-\item Output: Structured text/image metadata, draft script (3--6 sentences per slide)
+\item Input: Presentation file (.pptx, .pdf).
+\item Output: Structured text/image metadata, draft script (3--6 sentences per slide).
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 100 slides
-\item Max file size 200~MB
-\item Max 10 images per slide
-\item Supported formats: PPTX, PDF
+\item Max 100 slides.
+\item Max file size 200~MB.
+\item Max 10 images per slide.
+\item Supported formats: PPTX, PDF.
 \end{itemize}
 
 \subsubsection{Presentation Environment-Specific Script Adjustment}
-
 The system adjusts the script's vocabulary level, tone, and length based on the audience type (non-expert / practitioner / expert), target presentation time, and speaker's pace. Using TensorFlow.js-based vision models, audience facial expressions are analyzed every 3 seconds to compute a ``focus score'' (0--100). When time is running short or audience engagement decreases, an LLM provides real-time summaries or interactive remarks.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Script adjustment time $\leq 5$~s
-\item Focus detection accuracy $\geq 85\%$
-\item Timing deviation $\leq \pm 5\%$
-\item Script fluency $\geq 90\%$
+\item Script adjustment time $\leq 5$~s.
+\item Focus detection accuracy $\geq 85\%$.
+\item Timing deviation $\leq \pm 5\%$.
+\item Script fluency $\geq 90\%$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Audience type, target duration, speech rate (WPM), tone, audience video data
-\item Output: Adjusted script (.txt), recommended timing table, real-time teleprompter feedback
+\item Input: Audience type, target duration, speech rate (WPM), tone, audience video data.
+\item Output: Adjusted script (.txt), recommended timing table, real-time teleprompter feedback.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Camera resolution $\geq$ 720p
-\item Max 10 audience members detectable
-\item LLM request frequency $\leq 1$ per 10~s
-\item Presentation duration $\leq 60$ minutes
+\item Camera resolution $\geq$ 720p.
+\item Max 10 audience members detectable.
+\item LLM request frequency $\leq 1$ per 10~s.
+\item Presentation length $\leq 60$~min.
 \end{itemize}
 
 \subsection{Live Delivery Phase}
-
 This phase involves real-time interaction between the user and the system during the actual presentation. The system detects the presenter's speech and performs instant support tasks like synchronization, feedback, and suggestions.
 
-\subsubsection{Real-Time Teleprompter (Meeting Mode Support)}
-
+\subsubsection{Real-time Teleprompter (Meeting Mode Support)}
 The system transcribes the presenter’s and participants’ speech in real time using Google Cloud or Naver Clova STT and aligns it with the prepared script via KoSentence-BERT semantic similarity. The current sentence is visually highlighted on the teleprompter. In meeting mode, the STT pipeline can capture speech from multiple people in the room as a single mixed audio stream; downstream modules operate on this combined transcript.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Speech--script synchronization delay $\leq 1$~s
-\item Highlight accuracy $\geq 95\%$
-\item Alignment deviation $\leq 1$ sentence
+\item Speech--script synchronization delay $\leq 1$~s.
+\item Highlight accuracy $\geq 95\%$.
+\item Alignment deviation $\leq 1$ sentence.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Microphone audio (.wav, .mp3, $\geq 16$~kHz), script file (.txt)
-\item Output: Real-time highlighted script text and STT logs
+\item Input: Microphone audio (.wav, .mp3, $\geq 16$~kHz), script file (.txt).
+\item Output: Real-time highlighted script text and STT logs.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Session length $\leq 60$ minutes
-\item STT throughput $\geq 50$ words/s
-\item API cost $\approx \$0.006$/min
+\item Session length $\leq 60$~min.
+\item STT throughput $\geq 50$ words/s.
+\item API cost $\approx\$0.006$/min.
 \end{itemize}
 
 \subsubsection{Automatic Slide Transition}
-
 Through the Microsoft PowerPoint COM API, slides are automatically advanced when the script reaches predefined transition points.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Transition latency $\leq 0.5$~s
-\item Transition accuracy $\geq 95\%$
-\item Failure rate $\leq 5\%$
+\item Transition latency $\leq 0.5$~s.
+\item Transition accuracy $\geq 95\%$.
+\item Failure rate $\leq 5\%$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Slide file (.pptx), predefined transition IDs
-\item Output: Automatically advanced slide display
+\item Input: Slide file (.pptx), predefined transition IDs.
+\item Output: Automatically advanced slide display.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 100 slides
-\item Requires PowerPoint 2016 or later
+\item Max 100 slides.
+\item Requires PowerPoint 2016 or later.
 \end{itemize}
 
 \subsubsection{Flexible Speech-to-Script Matching}
-
 The system maintains synchronization even when speech deviates lexically from the script. Primary matching uses KoSentence-BERT vector similarity (threshold $\geq 0.8$), followed by secondary LLM-based contextual verification if necessary.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Matching success rate $\geq 90\%$
-\item False match rate $\leq 5\%$
-\item Matching latency $\leq 0.3$~s per sentence
+\item Matching success rate $\geq 90\%$.
+\item False match rate $\leq 5\%$.
+\item Matching latency $\leq 0.3$~s per sentence.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: STT transcript, script text
-\item Output: Matched sentence ID and highlight position
+\item Input: STT transcript, script text.
+\item Output: Matched sentence ID and highlight position.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item LLM call limit $\leq 1$ per second
-\item STT buffering $\leq 5$~s
+\item LLM call limit $\leq 1$ per second.
+\item STT buffering $\leq 5$~s.
 \end{itemize}
 
 \subsubsection{Key Content Omission Detection}
+Detects missing predefined key phrases using cosine similarity (threshold $\geq 0.75$) and alerts the presenter within 3 seconds.
 
-The system detects missing predefined key phrases using cosine similarity (threshold $\geq 0.75$) and alerts the presenter within 3 seconds.
-
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Detection precision $\geq 95\%$
-\item False alarm rate $\leq 5\%$
-\item Alert delay $\leq 2$~s
+\item Detection precision $\geq 95\%$.
+\item False alarm rate $\leq 5\%$.
+\item Alert delay $\leq 2$~s.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: STT transcript, key phrase list ($\leq 50$)
-\item Output: Omission alert and log file
+\item Input: STT transcript, key phrase list ($\leq 50$).
+\item Output: Omission alert and log file.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 500 sentences compared
-\item STT buffering interval: 5~s
+\item Max 500 sentences compared.
+\item STT buffering interval: 5~s.
 \end{itemize}
 
-\subsubsection{Real-Time Script Reconstruction}
-
+\subsubsection{Real-time Script Reconstruction}
 When omissions are detected, missing segments are asynchronously sent to an LLM that generates supplementary sentences within 5 seconds. Approved sentences are integrated into the script in real time.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Supplement generation $\leq 5$~s
-\item Contextual coherence $\geq 90\%$
-\item Integration success rate $\geq 90\%$
+\item Supplement generation time $\leq 5$~s.
+\item Contextual coherence $\geq 90\%$.
+\item Integration success rate $\geq 90\%$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Missing sentence ID, context text, LLM API key
-\item Output: Supplementary sentence, updated script
+\item Input: Missing sentence ID, context text, LLM API key.
+\item Output: Supplementary sentence, updated script.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 10 API calls per minute
-\item Sentence length $\leq 100$ characters
+\item Max 10 API calls per minute.
+\item Sentence length $\leq 100$ characters.
 \end{itemize}
 
-\subsubsection{Real-Time Presenter Dashboard}
-
+\subsubsection{Real-time Presenter Dashboard}
 The system visualizes metrics such as words per minute (WPM), voice volume, and progress rate using the Web Audio API, and applies TensorFlow Lite models for basic emotion recognition (e.g., tension/calmness).
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Data refresh interval $\leq 2$~s
-\item Emotion inference error $\leq \pm 5\%$
-\item Visualization accuracy $\geq 95\%$
+\item Data refresh interval $\leq 2$~s.
+\item Emotion inference error $\leq \pm 5\%$.
+\item Visualization accuracy $\geq 95\%$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Audio stream, STT logs
-\item Output: Live dashboard showing progress, WPM, emotional state
+\item Input: Audio stream, STT logs.
+\item Output: Live dashboard showing progress, WPM, emotional state.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Sampling rate $\geq 16$~kHz
-\item Dashboard latency $\leq 1$~s
+\item Sampling rate $\geq 16$~kHz.
+\item Dashboard latency $\leq 1$~s.
 \end{itemize}
 
 \subsubsection{Speech Gesture Suggestions}
-
 Before the presentation, the system analyzes slide images with a multimodal LLM to detect key visual elements (graphs, photos, diagrams) and map them to related keywords. During speech, when such keywords appear in STT, gesture icons (e.g., pointing, emphasis) are displayed on the teleprompter.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Suggestion latency $\leq 2$~s
-\item Gesture relevance $\geq 85\%$
-\item Recognition accuracy $\geq 90\%$
+\item Suggestion latency $\leq 2$~s.
+\item Gesture relevance $\geq 85\%$.
+\item Recognition accuracy $\geq 90\%$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Slide images, script keywords
-\item Output: Gesture icons displayed on teleprompter
+\item Input: Slide images, script keywords.
+\item Output: Gesture icons displayed on teleprompter.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 3 visual mappings per keyword
-\item Display duration: 2--3~s
+\item Max 3 visual mappings per keyword.
+\item Display duration: 2--3~s.
 \end{itemize}
 
 \subsubsection{Real-Time Context and Intent Tagging}
-
 The system analyzes STT text in real time and classifies each utterance according to its intent and type. This information is used as the foundation for the agenda map, decision board, and fact-check triggers.
 
-\paragraph*{Supported Tags}
+\textit{Supported Tags}
 \begin{itemize}
 \item General comment
 \item Idea proposal
@@ -362,258 +327,231 @@ The system analyzes STT text in real time and classifies each utterance accordin
 \item Fact-check request
 \end{itemize}
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item All utterances receive at least one tag from the predefined set
-\item Intent classification accuracy $\geq 85\%$ on test samples
+\item All utterances receive at least one tag from the predefined set.
+\item Intent classification accuracy $\geq 85\%$ on test samples.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: STT transcript segmented into utterances
-\item Output: Tagged utterance stream (text + tag(s) + timestamp)
+\item Input: STT transcript segmented into utterances.
+\item Output: Tagged utterance stream (text + tag(s) + timestamp).
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Classification latency $\leq 0.5$~s per utterance
-\item Tagging model must operate within the WebSocket round-trip time budget
+\item Classification latency $\leq 0.5$~s per utterance.
+\item The tagging model must operate within the WebSocket round-trip time budget.
 \end{itemize}
 
 \subsubsection{Real-Time Agenda Map}
-
 Using the tagged utterance stream, the system builds a real-time agenda map to prevent topic deviation and improve shared awareness. Each emerging topic is registered as a node in a network graph displayed on Screen~2.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Screen~2 displays a live STT log and its mapping to agenda nodes
-\item Utterances tagged as ``Idea,'' ``Decision,'' or ``Action Item'' are grouped under appropriate agenda nodes
-\item Nodes are color-coded by agenda type
-\item The active topic is clearly highlighted
-\item Node detail view shows STT snippet and timestamp
+\item Screen~2 displays a live STT log and its mapping to agenda nodes.
+\item Utterances tagged as Idea, Decision, or Action Item are grouped under appropriate agenda nodes.
+\item Nodes are color-coded by agenda type.
+\item The active topic is clearly highlighted.
+\item Node detail view shows STT snippet and timestamp.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Tagged utterance stream, semantic embeddings
-\item Output: Real-time agenda network graph on Screen~2
+\item Input: Tagged utterance stream, semantic embeddings.
+\item Output: Real-time agenda network graph on Screen~2.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Graph update interval $\leq 2$~s
-\item Max 30 agenda nodes per session
+\item Graph update interval $\leq 2$~s.
+\item Max 30 agenda nodes per session.
 \end{itemize}
 
-\subsubsection{Dual-Screen Synchronization Between Presenter and Shared Display}
-
+\subsubsection{Dual-Screen Synchronization between Presenter and Shared Display}
 The system keeps Screen~1 (Presenter Dashboard) and Screen~2 synchronized while respecting privacy boundaries.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Slide transition latency between Screen~1 and Screen~2 $\leq 0.5$~s
-\item No private elements (teleprompter text, omission alerts, AI suggestions) appear on Screen~2
+\item Slide transition latency between Screen~1 and Screen~2 $\leq 0.5$~s.
+\item No private elements (teleprompter text, omission alerts, AI suggestions) appear on Screen~2.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Slide control events, layout state, synchronization messages
-\item Output: Consistent view of the current slide and agenda state on Screen~2
+\item Input: Slide control events, layout state, synchronization messages.
+\item Output: Consistent view of the current slide and agenda state on Screen~2.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item WebSocket synchronization interval $\leq 1$~s
+\item WebSocket synchronization interval $\leq 1$~s.
 \end{itemize}
 
-\subsubsection{Real-Time Decisions and Action Item Widget}
+\subsubsection{Real-time Decisions and Action Item Widget}
+The system captures utterances tagged as Decision or Action Item and surfaces them in a dedicated widget on Screen~2, often placed below or beside the agenda map.
 
-The system captures utterances tagged as decision or action item and surfaces them in a dedicated widget on Screen~2, often placed below or beside the agenda map.
-
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Detection coverage for decision-like and action-like utterances $\geq 90\%$ on test scenarios
-\item New items appear in the list within 2 seconds of the utterance
+\item Detection coverage for decision-like and action-like utterances $\geq 90\%$ on test scenarios.
+\item New items appear in the list within 2 seconds of the utterance.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Tagged utterance stream (Decision / Action Item tags)
-\item Output: Real-time decision \& action-item list on Screen~2
+\item Input: Tagged utterance stream (Decision / Action Item tags).
+\item Output: Real-time decision and action-item list on Screen~2.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 100 items per session
-\item Each item stored with its text content and timestamp, with a link to the original transcript segment
+\item Max 100 items per session.
+\item Each item stored with its text content and timestamp, with a link to the original transcript segment.
 \end{itemize}
 
 \subsubsection{Real-Time Fact-Check and Research Widget}
+When the system detects a Fact-check request tag, it triggers a lightweight research pipeline (RAG or web search) and surfaces the result on Screen~2.
 
-When the system detects a fact-check request tag, it triggers a lightweight research pipeline (RAG or web search) and surfaces the result on Screen~2.
-
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Successful keyword extraction for at least 90\% of fact-check requests
-\item Research results displayed within 5 seconds
+\item Successful keyword extraction for at least 90\% of fact-check requests.
+\item Research results displayed within 5 seconds.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Tagged utterance stream (Fact-check request tag), knowledge base or web search API
-\item Output: Fact-check result widget with short answer and source link(s)
+\item Input: Tagged utterance stream (Fact-check request tag), knowledge base or web search API.
+\item Output: Fact-check result widget with short answer and source link(s).
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 30 fact-check queries per session
-\item Each query result limited to brief, conference-friendly summaries
+\item Max 30 fact-check queries per session.
+\item Each query result limited to brief, conference-friendly summaries.
 \end{itemize}
 
 \subsection{Post-Presentation Phase}
-
 This phase involves the user receiving feedback on their presentation and conducting a Q\&A session after the presentation has concluded.
 
 \subsubsection{Q\&A Auto-Response}
-
 In Q\&A mode, the system uses Retrieval-Augmented Generation (RAG) to search a pre-built database and generate 2--3 candidate answers, each referencing supporting slides or pages.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Answer generation time $\leq 5$~s
-\item Relevance score $\geq 0.85$
-\item Slide reference accuracy $\geq 98\%$
+\item Answer generation time $\leq 5$~s.
+\item Relevance score $\geq 0.85$.
+\item Slide reference accuracy $\geq 98\%$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Question (speech/text), presentation DB (JSON)
-\item Output: 2--3 candidate answers with referenced slides
+\item Input: Question (speech/text), presentation DB (JSON).
+\item Output: 2--3 candidate answers with referenced slides.
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max 20 questions per session
-\item Max 300 tokens per answer
-\item RAG cosine similarity $\geq 0.8$
+\item Max 20 questions per session.
+\item Max 300 tokens per answer.
+\item RAG cosine similarity $\geq 0.8$.
 \end{itemize}
 
 \subsubsection{Presentation and Meeting Analysis Report}
-
 After the meeting or presentation, the system automatically analyzes collected data (speech logs, agenda map, decisions, action items, and referenced research results) and generates a Meeting Summary Report. This report covers time management, speech habits, content delivery, and meeting outcomes such as major topics, ideas, decisions, action items, and external facts referenced during the discussion.
 
-\paragraph*{Acceptance Criteria}
+\textit{Acceptance Criteria}
 \begin{itemize}
-\item Report generation time $\leq 10$~s
-\item Analysis accuracy $\geq 95\%$
-\item User satisfaction $\geq 4.2/5.0$
+\item Report generation time $\leq 10$~s.
+\item Analysis accuracy $\geq 95\%$.
+\item User satisfaction $\geq 4.2/5.0$.
 \end{itemize}
 
-\paragraph*{Input \& Output}
+\textit{Input \& Output}
 \begin{itemize}
-\item Input: Speech logs, slide transitions, emotion data, agenda map, decision/action-item list, fact-check logs
-\item Output: Analysis report (.html, .pdf)
+\item Input: Speech logs, slide transitions, emotion data, agenda map, decision/action-item list, fact-check logs.
+\item Output: Analysis report (.html, .pdf).
 \end{itemize}
 
-\paragraph*{Constraints}
+\textit{Constraints}
 \begin{itemize}
-\item Max presentation time: 60 minutes
-\item Max 100{,}000 words processed
+\item Max presentation time: 60~min.
+\item Max 100\,000 words processed.
 \end{itemize}
 
+%========================
 \section{Version Control System}
 
-To manage source code and documentation, a version control system based on Git was established. A public repository named \emph{ai-assistant-for-presentation} was created on GitHub.
-
-The following source code and documents have been uploaded to the repository:
+To manage source code and documentation, a version control system based on Git was established. A public repository named \textit{ai-assistant-for-presentation} was created on GitHub. The following source code and documents have been uploaded to the repository:
 \begin{itemize}
-\item All backend and frontend source code
-\item Shared documents including this file (\verb|project_documentation.md|) and other design files
-\item Configuration files and project-related assets
+\item All backend and frontend source code.
+\item Shared documents including this file (project\_documentation.md) and other design files.
+\item Configuration files and project-related assets.
 \end{itemize}
+All team members (development, project management, and UI/UX design) have been granted access to the repository. For efficient GitHub management, the team will adopt a branch management strategy as illustrated in the architecture diagram.
 
-All team members (development, project management, and UI/UX design) have been granted access to the repository.  
-For efficient GitHub management, the team adopted a branch management strategy as illustrated in the project documentation.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{스크린샷 2025-12-12 오후 2.23.44.png}
+    \caption{Enter Caption}
+    \label{fig:placeholder}
+\end{figure}
 
+%========================
 \section{Development Environment}
 
 \subsection{Choice of Software Development Platform}
 
 \subsubsection{Platform Selection and Rationale}
-
 The project adopts a web-based client--server architecture as its primary development and deployment platform. The web environment ensures platform-independent accessibility without requiring users to install additional software, while providing seamless integration with cloud-based APIs such as Google Cloud Speech-to-Text and large-language-model (LLM) services. Modern web technologies, including WebSockets, Web Audio API, and TensorFlow.js, enable the implementation of essential real-time features such as live teleprompting and synchronized feedback dashboards.
 
 \subsubsection{Programming Languages and Rationale}
-
-Backend: Node.js--based API Routes are used to handle REST APIs and real-time communication (e.g., WebSocket or streaming endpoints). Node.js provides a non-blocking, event-driven runtime that is well suited for real-time applications such as teleprompters and meeting assistants. It also enables tight integration with the React frontend and offers a rich JavaScript/TypeScript ecosystem for calling external AI services (e.g., STT APIs and LLM APIs) and managing asynchronous workflows.
-
-Frontend: TypeScript/JavaScript (Node.js 20 or higher) with React~18.2. JavaScript is the only natively supported browser language and is indispensable for client-side interaction. React combined with TypeScript supports modular, maintainable UI components and ensures type safety.
+\begin{itemize}
+\item Backend: Node.js--based API Routes are used to handle REST APIs and real-time communication (e.g., WebSocket or streaming endpoints). Node.js provides a non-blocking, event-driven runtime that is well suited for real-time applications such as teleprompters and meeting assistants. It also enables tight integration with the React frontend and offers a rich JavaScript/TypeScript ecosystem for calling external AI services (e.g., STT APIs and LLM APIs) and managing asynchronous workflows.
+\item Frontend: TypeScript/JavaScript (Node.js 20 or higher) with React 18.2. JavaScript is the only natively supported browser language and is indispensable for client-side interaction. React combined with TypeScript supports modular, maintainable UI components and ensures type safety.
+\end{itemize}
 
 \subsubsection{Cost Estimation}
-
-The estimated total development cost is approximately USD 30.00, as summarized below:
+The estimated total development cost is approximately USD~30.00, as summarized below:
 \begin{itemize}
-\item Hardware: Personal laptops (MacBook Air/Pro) -- USD 0.00
-\item Software and IDE: Visual Studio Code (free), Cursor Pro (USD 20 per month)
-\item Cloud Services and APIs: AWS Free Tier, GCP STT and Vision API, OpenAI GPT Realtime Mini (approx.\ USD 10)
+\item Hardware: Personal laptops (MacBook Air/Pro) -- USD~0.00.
+\item Software and IDE: Visual Studio Code (free), Cursor Pro (USD~20 per month).
+\item Cloud Services and APIs: AWS Free Tier, GCP STT and Vision API, OpenAI GPT Realtime Mini (approx.\ USD~10).
 \end{itemize}
 
 \subsubsection{Development Environment Details}
-
 \begin{itemize}
-\item Operating Systems: Windows 11, macOS 14 (Sonoma)
-\item IDEs: Visual Studio Code (v1.90 or higher), Cursor (v1.7 or higher)
-\item Version Control: Git (v2.39 or higher) and GitHub public repository (\emph{ai-assistant-for-presentation})
-\item Backend Stack: Python 3.11+, FastAPI 0.110+, PostgreSQL 16 (Render hosted)
-\item Frontend Stack: Node.js 20.10+, npm 10.2+, React 18.2+, TypeScript 5.2+
-\item Major Libraries: \texttt{python-pptx}, \texttt{sentence-transformers}, \texttt{websockets}, TensorFlow.js, Web Audio API
-\item Hardware Resources: Three personal laptops (two MacBook Airs, one MacBook Pro) used for development and testing
+\item Operating Systems: Windows~11, macOS~14 (Sonoma).
+\item IDEs: Visual Studio Code (v1.90 or higher), Cursor (v1.7 or higher).
+\item Version Control: Git (v2.39 or higher) and GitHub public repository (\textit{ai-assistant-for-presentation}).
+\item Backend Stack: Python~3.11+, FastAPI~0.110+, PostgreSQL~16 (Render hosted).
+\item Frontend Stack: Node.js~20.10+, npm~10.2+, React~18.2+, TypeScript~5.2+.
+\item Major Libraries: \texttt{python-pptx}, sentence-transformers, WebSockets, TensorFlow.js, Web Audio API.
+\item Hardware Resources: Three personal laptops (two MacBook Airs, one MacBook Pro) used for development and testing.
 \end{itemize}
 
 \subsubsection{Use of Commercial Cloud Platforms}
-
 \begin{itemize}
 \item Google Cloud Platform (GCP): Utilized for Speech-to-Text and Vision OCR services to enable high-accuracy transcription and slide text extraction. Services operate within free-tier quotas.
 \item Amazon Web Services (AWS): EC2 for backend deployment, S3 for file storage, RDS for database hosting, and Route~53 for domain management. Free-tier services are used for prototype deployment and demonstration.
 \end{itemize}
 
 \subsection{Software in Use}
-
 Several existing software solutions and research studies were referenced in designing the system:
 \begin{itemize}
 \item PromptSmart (VoiceTrack): A commercial teleprompter offering real-time voice tracking. The proposed system extends its capabilities by adding semantic matching, omission detection, and automated slide control.
 \item Microsoft PowerPoint (Live Subtitles): Provides speech transcription but lacks contextual synchronization with scripts and automated slide transitions.
 \end{itemize}
-
-These benchmarks highlight the project's improvements in real-time adaptivity and AI-driven presentation assistance.
+These benchmarks highlight the project’s improvements in real-time adaptivity and AI-driven presentation assistance.
 
 \subsection{Task Distribution}
+\begin{itemize}
+\item Backend Development (Sangyoon Kwon, Dohoon Kim): System architecture design, FastAPI server and WebSocket implementation, database schema (PostgreSQL), AI logic integration (STT, LLM, BERT), cloud deployment (AWS, Render).
+\item Frontend Development (Hyeyun Kwon, Seohyun Kim): React-based UI implementation, client-side state management, real-time dashboard (Web Audio API), teleprompter interface, client-side AI (TensorFlow.js).
+\item Project Management \& UI Design (Daeun Lee, Minhyuk Jang): Project planning and scheduling, UI/UX design (Figma), documentation and VCS management, user testing and feedback analysis.
+\end{itemize}
 
-\begin{table}[!t]
-\centering
-\caption{Task distribution}
-\renewcommand{\arraystretch}{1.1}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{2.1cm}%
-                                  >{\raggedright\arraybackslash}p{2.2cm}%
-                                  >{\raggedright\arraybackslash}X}
-\toprule
-Role & Members & Responsibilities \\
-\midrule
-Backend Development &
-Sangyoon Kwon, Dohoon Kim &
-System architecture design, FastAPI server and WebSocket implementation, database schema (PostgreSQL), AI logic integration (STT, LLM, BERT), cloud deployment (AWS, Render). \\
-\midrule
-Frontend Development &
-Hyeyun Kwon, Seohyun Kim &
-React-based UI implementation, client-side state management, real-time dashboard (Web Audio API), teleprompter interface, client-side AI (TensorFlow.js). \\
-\midrule
-Project Management \& UI Design &
-Daeun Lee, Minhyuk Jang &
-Project planning and scheduling, UI/UX design (Figma), documentation and VCS management, user testing and feedback analysis. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
+%========================
 \section{Specification}
 
 \subsection{Requirement 1: Real-Time Teleprompter}
@@ -621,39 +559,40 @@ Project planning and scheduling, UI/UX design (Figma), documentation and VCS man
 This process involves a tightly coordinated real-time loop between the client (web browser) and the server (Python backend) through WebSocket communication.
 
 \subsubsection{Client Initialization}
-
-When the user presses ``Start Presentation,'' the React frontend requests microphone access using \verb|navigator.mediaDevices.getUserMedia()| and establishes a secure WebSocket (\verb|wss://|) connection to the backend API server. The Web Audio API initializes an \verb|AudioContext| and \verb|ScriptProcessorNode| to capture raw audio chunks.
+When the user presses ``Start Presentation,'' the React frontend requests microphone access using \texttt{navigator.mediaDevices.getUserMedia()} and establishes a secure WebSocket (\texttt{wss://}) connection to the backend API server. The Web Audio API initializes an \texttt{AudioContext} and \texttt{ScriptProcessorNode} to capture raw audio chunks.
 
 \subsubsection{Client-Side Real-Time Audio Streaming}
-
-The \verb|ScriptProcessorNode| continuously triggers \verb|onaudioprocess| events (e.g., every 500~ms). Each raw audio buffer (16-bit PCM) is sent to the backend server through WebSocket.
+The \texttt{ScriptProcessorNode} continuously triggers \texttt{onaudioprocess} events (e.g., every 500~ms). Each raw audio buffer (16-bit PCM) is sent to the backend server through WebSocket.
 
 \subsubsection{Server-Side STT and Synchronization}
+The backend receives the audio chunks and streams them to the Google Cloud Speech-to-Text API. The API returns interim (fast but less accurate) and final (slower but more accurate) transcripts. When a final sentence is received, it is appended to the full transcript of the session. The backend then calls the \texttt{FlexibleSpeechMatcher} service to locate the new \texttt{currentSentenceIndex} within the user’s script.
 
-The backend receives the audio chunks and streams them to the Google Cloud Speech-to-Text API. The API returns interim (fast but less accurate) and final (slower but more accurate) transcripts. When a final sentence is received, it is appended to the full transcript of the session. The backend then calls the \emph{FlexibleSpeechMatcher} service to locate the new \verb|currentSentenceIndex| within the user's script.
-
-\subsubsection{Server Broadcast and Client Update}
-
+\subsubsection{Server Broadcast}
 The server immediately sends a WebSocket message to the client:
 \begin{verbatim}
 { "action": "UPDATE_TELEPROMPTER",
   "index": currentSentenceIndex }
 \end{verbatim}
+
+\subsubsection{Client Update}
 The frontend WebSocket listener receives the message and updates the highlighted text accordingly, scrolling the teleprompter to the current index in real time.
 
 \subsection{Requirement 2: Flexible Speech-to-Script Matching}
-
 This algorithm implements a hybrid matching mechanism combining fast vector similarity and fallback large-language-model (LLM) validation.
 
+\subsubsection*{Pseudocode Overview}
 \begin{verbatim}
 SIMILARITY_THRESHOLD = 0.75
 SEARCH_WINDOW = 5
 LLM_VALIDATION_THRESHOLD = 0.60
 
 Function FindCurrentPosition(fullTranscript,
-                             scriptSentences, lastIndex):
+                             scriptSentences,
+                             lastIndex):
+
     latestTranscript = GetLastNWords(fullTranscript, 10)
-    transcriptVector = KoSentenceBERT.encode(latestTranscript)
+    transcriptVector = 
+        KoSentenceBERT.encode(latestTranscript)
 
     searchStart = lastIndex
     searchEnd = min(lastIndex + SEARCH_WINDOW,
@@ -665,8 +604,8 @@ Function FindCurrentPosition(fullTranscript,
 
     # Step 1: Fast vector similarity
     for index, sentence in enumerate(searchWindow):
-        similarity = CosineSimilarity(transcriptVector,
-                                      sentence.vector)
+        similarity = CosineSimilarity(
+            transcriptVector, sentence.vector)
         if similarity > highestSimilarity:
             highestSimilarity = similarity
             bestMatchIndex = searchStart + index
@@ -688,109 +627,226 @@ Function FindCurrentPosition(fullTranscript,
 
     return lastIndex
 \end{verbatim}
-
 This process ensures low latency while maintaining semantic accuracy through adaptive matching.
 
 \subsection{Requirement 3: Key Content Omission Detection}
-
 This function integrates directly with the flexible matching process. When a skipped section is detected, the system checks whether any omitted sentence contains a predefined key phrase and alerts the presenter.
 
-\begin{enumerate}
-\item Database Preparation: When users upload a script, each sentence is marked with a boolean attribute \verb|isKeyPhrase| (true / false) and stored in the database.
-\item Server-Side Omission Detection: When \verb|FindCurrentPosition()| identifies a new \verb|bestMatchIndex| greater than \verb|lastIndex + 1|, the server calls \verb|CheckForOmissions()|.
-\item Omission Logic: If skipped sentences are found between the two indices, each is inspected for \verb|isKeyPhrase == true|. When detected, the omitted sentence index is flagged, and the following message is broadcast:
+\subsubsection{Database Preparation}
+When users upload a script, each sentence is marked with a boolean attribute \texttt{isKeyPhrase} (true / false) and stored in the database.
+
+\subsubsection{Server-Side Omission Detection}
+When \texttt{FindCurrentPosition()} identifies a new \texttt{bestMatchIndex} greater than \texttt{lastIndex + 1}, the server calls \texttt{CheckForOmissions()}.
+
+\subsubsection{Omission Logic}
+If skipped sentences are found between the two indices, each is inspected for \texttt{isKeyPhrase == true}. When detected, the omitted sentence index is flagged, and the following message is broadcast:
 \begin{verbatim}
 { "action": "OMISSION_DETECTED",
   "index": omittedSentenceIndex }
 \end{verbatim}
-\item Client Notification: The frontend highlights the corresponding part of the script (e.g., flashing red or adding a border) to visually warn the presenter in real time. Simultaneously, an asynchronous script-reconstruction task (Requirement~4) is triggered.
-\end{enumerate}
+
+\subsubsection{Client Notification}
+The frontend highlights the corresponding part of the script (for example, flashing red or adding a border) to visually warn the presenter in real time. Simultaneously, an asynchronous script-reconstruction task (Requirement 4) is triggered.
 
 \subsection{Requirement 4: Real-Time Script Reconstruction}
-
 This asynchronous process generates short ``bridging sentences'' whenever key content omissions are detected, ensuring smooth narrative flow without latency in the main loop.
 
-\begin{enumerate}
-\item Asynchronous Trigger: \verb|CheckForOmissions()| launches \verb|HandleOmissionAsynchronously()| in a separate asynchronous task.
-\item Prompt Generation for LLM: The function combines three inputs: (a) the omitted sentence, (b) the current context sentences, and (c) an instruction prompt such as:
+\subsubsection{Asynchronous Trigger}
+\texttt{CheckForOmissions()} launches \texttt{HandleOmissionAsynchronously()} in a separate asynchronous task.
 
-``You are a presentation coach. The presenter accidentally omitted `[\emph{omittedSentence}]' and is now moving to `[\emph{contextSentences}]'. Please generate one short, natural bridging sentence in Korean that connects these topics smoothly.'''
+\subsubsection{Prompt Generation for LLM}
+The function combines three inputs: (a) the omitted sentence, (b) the current context sentences, and (c) an instruction prompt such as:
+``You are a presentation coach. The presenter accidentally omitted `[omittedSentence]' and is now moving to `[contextSentences]'. Please generate one short, natural bridging sentence in Korean that connects these topics smoothly.’’
 
-\item LLM API Invocation: The backend asynchronously requests an LLM (e.g., GPT or Gemini) to generate the bridging sentence.
-\item Response Delivery: Upon success, the server sends the message
+\subsubsection{LLM API Invocation}
+The backend asynchronously requests an LLM (e.g., GPT or Gemini) to generate the bridging sentence.
+
+\subsubsection{Response Delivery}
+Upon success, the server sends the message:
 \begin{verbatim}
 { "action": "SCRIPT_SUGGESTION",
   "text": llm_generated_sentence }
 \end{verbatim}
-\item Client Interface Behavior: The React frontend displays the generated sentence in the AI Suggestion section as an alert message: ``Do you approve this suggestion?'' with Accept (\#0064FF) and No (\#E0E6EA) buttons. If the user selects Accept, the updated script is applied, and a small alert ``Update complete'' appears at the top-right corner.
-\end{enumerate}
 
+\subsubsection{Client Interface Behavior}
+The React frontend displays the generated sentence in the AI Suggestion section as an alert message: ``Do you approve this suggestion?'' with Accept and No buttons. If the user selects Accept, the updated script is applied and a small alert ``Update complete'' appears at the top-right corner.
+
+%========================
 \section{Architecture Design}
 
 \subsection{Overall Architecture}
-
-FoS consists of three main modules: the Frontend (React web application), the Backend (Main Server), and the Data \& AI Service layer (Supabase--PostgreSQL and Gemini). Together, these components form an end-to-end pipeline that captures the user's speech in Chrome, processes it, and reflects the results on the presentation and meeting interfaces in real time.
+The overall architecture consists of three main modules: the Frontend (React web application), the Backend (Main Server), and the Data \& AI Service layer (Supabase--PostgreSQL and Gemini). Together, these components form an end-to-end pipeline that captures the user’s speech in Chrome, processes it, and reflects the results on the presentation and meeting interfaces in real time.
 
 The first module, the Frontend, is implemented as a React + TypeScript web application running in the Chrome browser. The user speaks through the browser, and the Web Speech API converts the voice input into text. Using this text and the data received from the backend, the frontend renders the real-time teleprompter view, the meeting agenda map, and related dashboards. It communicates with the backend via WebSocket and REST APIs, sending user input and receiving updates such as AI analysis results, alerts, and script suggestions, which are then dynamically reflected in the user interface.
 
-The second module, the Backend (Main Server), is built on Node.js--based API Routes and serves as the core processing engine of the system. The backend aggregates utterance text and UI state from the frontend, manages them at the session level, and interprets the overall flow of presentations and meetings. It also integrates with external AI services such as Gemini and other STT/summary APIs by sending script files and meeting content and receiving various inferred results, including summaries, classifications, and suggested sentences. These results are returned to the frontend for visualization and are persisted in the database for later review and analysis. Thanks to Node.js's non-blocking, event-driven architecture, the backend can handle real-time text streaming and notification delivery with minimal latency.
+The second module, the Backend (Main Server), is built on Node.js--based API Routes and serves as the core processing engine of the system. The backend aggregates utterance text and UI state from the frontend, manages them at the session level, and interprets the overall flow of presentations and meetings. It also integrates with external AI services such as Gemini and other STT/summary APIs by sending script files and meeting content and receiving various inferred results, including summaries, classifications, and suggested sentences. These results are returned to the frontend for visualization and are persisted in the database for later review and analysis. Thanks to Node.js’s non-blocking, event-driven architecture, the backend can handle real-time text streaming and notification delivery with minimal latency.
 
-The third module is the Data \& AI Service layer. Through Supabase, the backend accesses a PostgreSQL database via REST APIs to store and retrieve user profiles, uploaded scripts, sentence-level metadata, meeting logs, and AI suggestion history. This layer ensures consistent state across sessions and provides the data foundation for both real-time operation and post-hoc analysis. On the AI side, Gemini functions as an external AI service positioned on the right side of the architecture diagram. The backend sends script and meeting content to Gemini and receives inferred results, which are then propagated to the frontend and stored in the database, completing the overall FoS architecture.
+The third module is the Data \& AI Service layer. Through Supabase, the backend accesses a PostgreSQL database via REST APIs to store and retrieve user profiles, uploaded scripts, sentence-level metadata, meeting logs, and AI suggestion history. This layer ensures consistent state across sessions and provides the data foundation for both real-time operation and post-hoc analysis. On the AI side, Gemini functions as an external AI service. The backend sends script and meeting content to Gemini and receives inferred results, which are then propagated to the frontend and stored in the database, completing the overall FoS architecture.
 
 \subsection{Directory Organization}
 
 \begin{table}[!t]
+\caption{Directory Organization}
+\label{tab:directory}
 \centering
-\caption{Directory organization (excerpt)}
-\renewcommand{\arraystretch}{1.1}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{2.8cm}X}
-\toprule
-Directory & Main files \\
-\midrule
-\verb|fos/frontend/src| & \verb|App.tsx|, \verb|Attributions.md|, \verb|index.css|, \verb|main.tsx|, \verb|vite-env.d.ts| \\
-\verb|fos/frontend/src/assets| & \verb|favicon.png|, \verb|FOS_Logo.png|, \verb|google_logo.png|, \verb|kakao_logo.png| \\
-\verb|fos/frontend/src/components| & \verb|AgendaTag.tsx|, \verb|Logo.tsx|, \verb|StatusPill.tsx|, \verb|TopNavBar.tsx| \\
-\verb|fos/frontend/src/components/ui| & \verb|button.tsx|, \verb|checkbox.tsx|, \verb|input.tsx|, \verb|label.tsx|, \verb|textarea.tsx|, \verb|utils.tsx| \\
-\verb|fos/frontend/src/lib| & \verb|supabaseClient.tsx| \\
-\verb|fos/frontend/src/screens| & \verb|AgendaTrackerScreen.tsx|, \verb|EndPresentationModal.tsx|, \verb|LoginScreen.tsx|,\\ & \verb|MainScreen.tsx|, \verb|MeetingSummaryScreen.tsx|, \verb|PresentationSetupScreen.tsx|, \verb|TeleprompterScreen.tsx| \\
-\verb|fos/frontend/src/styles| & \verb|globals.css| \\
-\verb|fos/docs| & \verb|SE_Assignment2_G12.pdf|, \verb|architecture_diagram.png|, \verb|fos_paper.pdf|, \verb|fos_paper.tex|, \verb|paperscreenshot.png|, \verb|structure.md|, \verb|webscreenshot.png| \\
-\verb|fos/api| & \verb|extract-keywords.ts|, \verb|llm-regenerate.ts|, \verb|llm-test.ts|, \verb|speech-comparison.ts| \\
-\verb|fos/api/utils| & \verb|comparison-service.ts|, \verb|llm-client.ts|, \verb|types.ts| \\
-\verb|fos/.vercel| & \verb|README.txt|, \verb|Project.json| \\
-\bottomrule
-\end{tabularx}
+\begin{tabular}{p{0.30\columnwidth} p{0.60\columnwidth}}
+\hline
+Directory & File name \\
+\hline
+fos/frontend/src &
+App.tsx, Attributions.md, index.css, main.tsx, vite-env.d.ts \\
+fos/frontend/src/assets &
+favicon.png, fos\_logo.png, google\_logo.png, kakao\_logo.png \\
+fos/frontend/src/components &
+AgendaTag.tsx, Logo.tsx, StatusPill.tsx, TopNavBar.tsx \\
+fos/frontend/src/components/ui &
+button.tsx, checkbox.tsx, input.tsx, label.tsx, textarea.tsx, utils.ts \\
+fos/frontend/src/lib &
+supabaseClient.ts \\
+fos/frontend/src/screens &
+AgendaTrackerScreen.tsx, EndPresentationModal.tsx, LoginScreen.tsx,\\
+& MainScreen.tsx, MeetingSummaryScreen.tsx, PresentationSetupScreen.tsx,\\
+& TeleprompterScreen.tsx \\
+fos/frontend/src/styles &
+globals.css \\
+fos/docs &
+SE\_Assignment2\_G12.pdf, architecture\_diagram.png, fos\_paper.pdf,\\
+& fos\_paper.tex, paperscreenshot.png, structure.md, webscreenshot.png \\
+fos/api &
+extract-keywords.ts, llm-regenerate.ts, llm-test.ts, speech-comparison.ts \\
+fos/api/utils &
+comparison-service.ts, llm-client.ts, types.ts \\
+fos/.vercel &
+README.txt, Project.json \\
+\hline
+\end{tabular}
 \end{table}
 
 \subsection{Module 1: Frontend}
 
-\subsubsection{Purpose}
-
+\subsubsection*{1) Purpose}
 The Frontend Module of FoS serves as the client-facing interface, allowing users to interact with the system through the web browser. It provides a seamless flow across core features such as presentation setup, real-time teleprompter, agenda tracking, and meeting summaries. The module visualizes analysis results from the server and AI modules, handles web speech input and user interactions, and aims to deliver a smooth and focused experience for presenters and meeting participants.
 
-\subsubsection{Functionality}
-
+\subsubsection*{2) Functionality}
 The frontend module manages multiple screens---including login, main dashboard, presentation setup, teleprompter, agenda map, and meeting summary---using routing to support the entire presentation and meeting flow. It forwards speech recognized by the browser's Web Speech API to the backend and, based on the returned script-matching, keyword, and agenda information, renders highlights, progress indicators, and agenda nodes in real time. It also integrates Supabase-based social login to maintain user sessions and leverages reusable components such as buttons, navigation bars, and status pills to build a consistent interface that communicates smoothly with other modules.
+
+\subsubsection*{3) Location of Source Code}
+\url{https://github.com/april2901/fos/tree/main/frontend}
+
+\subsubsection*{4) Class Component}
+
+\paragraph{(1) \texttt{FoS/frontend/src}} 
+This is the root directory that contains the application entry point and global configuration files.
+\begin{itemize}
+  \item \texttt{App.tsx}: The main component of the application; defines routing and the overall layout.
+  \item \texttt{Attributions.md}: A document that records copyright and attribution information for external libraries and resources used in the project.
+  \item \texttt{index.css}: The file that defines the base CSS styles for the application.
+  \item \texttt{main.tsx}: The entry point of the React application; renders the root component into the DOM.
+  \item \texttt{vite-env.d.ts}: A file that defines TypeScript environment types for the Vite build tool.
+\end{itemize}
+
+\paragraph{(2) \texttt{FoS/frontend/src/assets}} 
+This folder contains images and other static resource files used in the application.
+\begin{itemize}
+  \item \texttt{favicon.png}: The favicon image displayed in the browser tab.
+  \item \texttt{FOS\_Logo.png}: The main logo image of the FoS application.
+  \item \texttt{google\_Logo.png}: The logo image used for the Google social login button.
+  \item \texttt{kakao\_Logo.png}: The logo image used for the Kakao social login button.
+\end{itemize}
+
+\paragraph{(3) \texttt{FoS/frontend/src/components}} 
+This folder contains reusable UI components.
+\begin{itemize}
+  \item \texttt{AgendaTag.tsx}: A component that displays presentation agenda items as tags.
+  \item \texttt{Logo.tsx}: A component that renders the FoS logo.
+  \item \texttt{StatusPill.tsx}: A component that displays status information as a pill-shaped badge.
+  \item \texttt{TopNavBar.tsx}: A component that renders the top navigation bar.
+\end{itemize}
+
+\paragraph{(4) \texttt{FoS/frontend/src/components/ui}} 
+This folder contains base UI components built on top of \texttt{shadcn/ui}.
+\begin{itemize}
+  \item \texttt{button.tsx}: A reusable button component.
+  \item \texttt{checkbox.tsx}: A checkbox input component.
+  \item \texttt{input.tsx}: A text input field component.
+  \item \texttt{label.tsx}: A label component for form elements.
+  \item \texttt{textarea.tsx}: A multi-line text input component.
+  \item \texttt{utils.ts}: A file that defines utility functions used by UI components.
+\end{itemize}
+
+\paragraph{(5) \texttt{FoS/frontend/src/lib}} 
+This folder contains configuration files for integrating external services and libraries.
+\begin{itemize}
+  \item \texttt{supabaseClient.ts}: A file that creates and configures the Supabase client instance.
+\end{itemize}
+
+\paragraph{(6) \texttt{FoS/frontend/src/screens}} 
+This folder contains screen components that make up each page of the application.
+\begin{itemize}
+  \item \texttt{AgendaTrackerScreen.tsx}: The screen that tracks and displays agenda progress during a presentation.
+  \item \texttt{EndPresentationModal.tsx}: A modal component displayed when a presentation ends.
+  \item \texttt{LoginScreen.tsx}: The screen that handles user login and social authentication.
+  \item \texttt{MainScreen.tsx}: The main dashboard screen shown after login.
+  \item \texttt{MeetingSummaryScreen.tsx}: The screen that displays a summary of the meeting after the presentation ends.
+  \item \texttt{PresentationSetupScreen.tsx}: The screen used to configure settings before starting a presentation.
+  \item \texttt{TeleprompterScreen.tsx}: The screen that provides teleprompter functionality during a presentation.
+\end{itemize}
+
+\paragraph{(7) \texttt{FoS/frontend/src/styles}} 
+This folder contains global style and theme-related CSS files.
+\begin{itemize}
+  \item \texttt{globals.css}: The file that defines Tailwind CSS configuration and global styles.
+\end{itemize}
 
 \subsection{Module 2: Backend \& AI}
 
-\subsubsection{Purpose}
-
+\subsubsection*{1) Purpose}
 The Backend \& AI Module acts as the core processing engine of FoS, handling requests from the frontend and executing business logic such as LLM calls, script--speech comparison, keyword extraction, and skipped-section reconstruction. Its purpose is to transform raw spoken and scripted content into structured insights, enabling intelligent features that help users stay focused on their speech during presentations and meetings.
 
-\subsubsection{Functionality}
+\subsubsection*{2) Functionality}
+This module exposes API endpoints under \texttt{/api} for keyword extraction, script reconstruction, LLM connectivity testing, and script--speech comparison. Using \texttt{comparison-service.ts}, it performs text normalization, partial-range search, and skipped-range detection to compute the current matched index and skipped segments, providing the data needed for teleprompter highlighting and error visualization. Through \texttt{llm-client.ts}, it encapsulates calls to LLMs such as Gemini with shared configuration, returning keyword lists, meeting-analysis JSON objects, and reconstructed sentences in a consistent format. The \texttt{types.ts} file defines shared data structures used across the module, ensuring stable and type-safe communication between APIs and other parts of the system.
 
-This module exposes API endpoints under \verb|/api| for keyword extraction, script reconstruction, LLM connectivity testing, and script--speech comparison. Using \verb|comparison-service.ts|, it performs text normalization, partial-range search, and skipped-range detection to compute the current matched index and skipped segments, providing the data needed for teleprompter highlighting and error visualization. Through \verb|llm-client.ts|, it encapsulates calls to LLMs such as Gemini with shared configuration, returning keyword lists, meeting-analysis JSON objects, and reconstructed sentences in a consistent format. The \verb|types.ts| file defines shared data structures used across the module, ensuring stable and type-safe communication between APIs and other parts of the system.
+\subsubsection*{3) Location of Source Code}
+\url{https://github.com/april2901/fos/tree/main/api}
+
+\subsubsection*{4) Class Component}
+
+\paragraph{(1) \texttt{FoS/api}} 
+This directory contains backend API route handlers that expose core LLM and speech-matching features to the frontend.
+\begin{itemize}
+  \item \texttt{extract-keywords.ts}: API endpoint that receives a presentation script, calls the Gemini model, and returns 3--5 key keywords extracted from the script.
+  \item \texttt{llm-regenerate.ts}: API used to reconstruct skipped parts of a presentation script by sending the skipped content and its surrounding context to the LLM and generating a natural bridging sentence.
+  \item \texttt{llm-test.ts}: Test endpoint for checking LLM connectivity and prompt/response behavior, used to verify that model calls work correctly.
+  \item \texttt{speech-comparison.ts}: API that compares recognized speech text with the full script, computes the current matched index, and returns matching confidence and skipped ranges. It powers the teleprompter's highlight position and skipped-segment visualization.
+\end{itemize}
+
+\paragraph{(2) \texttt{FoS/api/utils}} 
+This directory contains shared business logic, utility modules, and type definitions used by the API routes.
+\begin{itemize}
+  \item \texttt{comparison-service.ts}: Module that implements the core logic for comparing script text and spoken text, including text normalization, partial range search, and skipped-range detection used by \texttt{speech-comparison.ts}.
+  \item \texttt{llm-client.ts}: Client wrapper for calling LLM APIs (e.g., Gemini), encapsulating common configuration such as model name, temperature, token limits, and request/response handling.
+  \item \texttt{types.ts}: File that defines TypeScript interfaces and types for speech comparison results, keyword extraction results, LLM responses, and other shared data structures.
+\end{itemize}
 
 \subsection{Module 3: Configuration}
 
-\subsubsection{Purpose}
-
+\subsubsection*{1) Purpose}
 The Configuration Module defines how FoS is recognized and deployed within the Vercel environment. It manages project metadata, linked repositories, and environment settings so that the frontend and backend modules can run consistently and reliably in the cloud.
 
-\subsubsection{Functionality}
+\subsubsection*{2) Functionality}
+The \texttt{.vercel} directory stores metadata such as the Vercel project ID, linked GitHub repository, and deployment environments (e.g., production and preview), controlling the deployment pipeline and domain configuration. \texttt{Project.json} defines these settings in JSON form, enabling branch-based automatic builds and deployments, while \texttt{README.txt} documents how the directory and deployment setup work so that team members can share a common understanding of the configuration and release process.
 
-The \verb|.vercel| directory stores metadata such as the Vercel project ID, linked GitHub repository, and deployment environments (e.g., production and preview), controlling the deployment pipeline and domain configuration. \verb|Project.json| defines these settings in JSON form, enabling branch-based automatic builds and deployments, while \verb|README.txt| documents how the directory and deployment setup work so that team members can share a common understanding of the configuration and release process.
+\subsubsection*{3) Location of Source Code}
+\url{https://github.com/april2901/fos/tree/main/.vercel}
+
+\subsubsection*{4) Class Component}
+
+\paragraph{(1) \texttt{FoS/.vercel}} 
+This directory contains Vercel deployment metadata and configuration files that control how the project is recognized and deployed in the Vercel environment.
+\begin{itemize}
+  \item \texttt{README.txt}: Text document that describes how the Vercel project is configured and deployed and how the \texttt{.vercel} directory is used.
+  \item \texttt{Project.json}: JSON file that stores Vercel project metadata and settings, including items such as the project ID, linked Git repository, and environment-related deployment configuration.
+\end{itemize}
 
 \section{Initial Functional Test Cases}
 
@@ -798,206 +854,204 @@ The system consists of six core screens, each representing a key stage in the us
 
 \subsection{Screen List}
 
-\begin{itemize}
-\item Screen 1. Login -- Users enter their email and password to access the system.
-\item Screen 2. Main Dashboard -- Provides two primary entry points: ``Start Meeting'' (directly to Screen~5) and ``Prepare for Presentation'' (to Screen~3).
-\item Screen 3. Presentation Preparation Screen -- Users upload presentation slides, enter scripts, and verify estimated presentation time.
-\item Screen 4. Smart Presentation Teleprompter (Presentation Mode) -- Real-time STT matches the speaker's voice to the script, highlights spoken parts, and auto-advances slides.
-\item Screen 4-2. Presentation End Modal (Switch to Meeting Mode) -- After the presentation ends, users can either return to the main screen or directly begin a meeting with an agenda map pre-generated from the presentation content.
-\item Screen 5. Agenda Map (Real-Time Meeting Map) -- Real-time STT analyzes discussions, categorizes statements (Idea, Decision, Action Item, etc.), and generates a branching visual map.
-\item Screen 6. Meeting Summary Report -- Displays the final agenda map, decisions, action items, and a chronological timeline of the meeting.
-\end{itemize}
+\paragraph{Screen 1. Login}
+Users enter their email and password to access the system.
+
+\paragraph{Screen 2. Main Dashboard}
+Provides two primary entry points: ``Start Meeting'' $\rightarrow$ navigates directly to Screen~5 (Agenda Map), and ``Prepare for Presentation'' $\rightarrow$ navigates to Screen~3 (Presentation Preparation Screen).
+
+\paragraph{Screen 3. Presentation Preparation Screen}
+Users upload presentation slides, enter scripts, and verify estimated presentation time.
+
+\paragraph{Screen 4. Smart Presentation Teleprompter (Presentation Mode)}
+Real-time STT matches the speaker's voice to the script, highlights spoken parts, and auto-advances slides.
+
+\paragraph{Screen 4-2. Presentation End Modal (Switch to Meeting Mode)}
+After the presentation ends, users can either return to the main screen or directly begin a meeting with Agenda Map pre-generated from the presentation content.
+
+\paragraph{Screen 5. Agenda Map (Real-Time Meeting Map)}
+Real-time STT analyzes discussions, categorizes statements (Idea, Decision, Action Item, etc.), and generates a branching visual map.
+
+\paragraph{Screen 6. Meeting Summary Report}
+Displays the final agenda map, decisions, action items, and a chronological timeline of the meeting.
 
 \subsection{Initial Functional Test Case Table}
 
 \begin{table*}[!t]
+\caption{Initial Functional Test Case Table}
+\label{tab:functional_test}
 \centering
-\caption{Initial functional test cases}
-\label{tab:testcases}
-\renewcommand{\arraystretch}{1.1}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.8cm}%
-                                >{\raggedright\arraybackslash}p{2.0cm}%
-                                >{\raggedright\arraybackslash}p{2.6cm}%
-                                >{\raggedright\arraybackslash}p{3.0cm}X}
+\footnotesize
+\begin{tabular}{p{0.12\textwidth} p{0.17\textwidth} p{0.20\textwidth} p{0.23\textwidth} p{0.23\textwidth}}
 \toprule
-Use Case & Function tested & Initial system state & Input & Expected output \\
+Use Case & Function Being Tested & Initial System State & Input & Expected Output \\
 \midrule
-User Login (valid) &
+User Login &
 System authenticates user and opens main dashboard &
 User is on Login Screen, not authenticated &
-User enters valid email and password, clicks a login button &
-User is authenticated and Screen~2 (Main Dashboard) is displayed. \\
-\midrule
-User Login (invalid) &
+User enters valid email \& password, clicks a login button &
+User is authenticated and Screen~2 (Main) is displayed. \\
+
+User Login &
 System rejects invalid credentials &
 User is on Login Screen, not authenticated &
 User enters invalid email or password, clicks a login button &
-Login fails, an error message is shown, and the user stays on the Login Screen. \\
-\midrule
+Login fails, error message is shown, user stays on Login Screen. \\
+
 Navigate to Presentation Prep &
 System routes to Screen~3 &
 User authenticated, on Screen~2 &
 Click ``Prepare for Presentation'' &
 Navigate to Screen~3. \\
-\midrule
+
 Start Meeting Immediately &
 System routes to Screen~5 &
 User authenticated, on Screen~2 &
 Click ``Start Meeting'' &
 Navigate to Screen~5 with empty Agenda Map. \\
-\midrule
+
 Enter Presentation Title &
 System accepts title input &
 Screen~3 loaded &
 Enter text in title field &
 Title saved in preparation state. \\
-\midrule
+
 Enter Script &
 Script is captured and character count calculated &
 Script field empty &
 Type script content &
 Estimated time updates in real time. \\
-\midrule
+
 Upload Slides &
 System accepts ppt/pdf file &
 No file uploaded &
 Upload a valid ppt/pdf &
 Slides preview shown; auto-matching enabled. \\
-\midrule
+
 Auto Script--Slide Matching &
 System matches script segments to slide pages &
-Script + slides both provided &
+Script and slides both provided &
 Click ``Auto-Match'' &
 Slide--script mapping is generated. \\
-\midrule
+
 Begin Presentation &
 System navigates to Screen~4 &
 Inputs complete &
 Click ``Start Presentation'' &
 Navigate to Screen~4. \\
-\midrule
+
 Start Teleprompter &
 STT begins and script highlighting activates &
-Screen~4 loaded, STT off &
+Screen~4 loaded, STT OFF &
 Click ``Start'' &
 STT activated, real-time highlighting begins. \\
-\midrule
+
 Pause Teleprompter &
 STT pauses &
 Teleprompter running &
 Click ``Pause'' &
 Highlight freezes; STT stops listening. \\
-\midrule
+
 Auto Slide Advance &
 Slide moves based on script progression &
 STT running &
 Speak script matching slide threshold &
 Slide auto-advance triggered. \\
-\midrule
+
 Volume \& Speed Monitoring &
 Dashboard displays metrics &
 Teleprompter active &
 Speak out loud &
 Volume level and speaking speed update dynamically. \\
-\midrule
+
 End Presentation &
 Presentation ends and modal opens &
 Teleprompter active &
 Click ``End Presentation'' &
 Screen~4-2 modal appears. \\
-\midrule
+
 Start Follow-Up Meeting &
 Modal transitions to Screen~5 &
 Modal displayed &
 Click ``Start Follow-Up Meeting'' &
-Navigate to Screen~5 with auto-generated initial Agenda Map from presentation content. \\
-\midrule
+Navigate to Screen~5 with auto-generated initial Agenda Map from presentation. \\
+
 Return to Main &
 Back to Screen~2 &
 Modal displayed &
 Click ``Finish'' &
 Navigate to Screen~2. \\
-\midrule
+
 Real-Time STT Categorization &
 System tags utterances (Idea, Decision, etc.) &
-STT on, meeting ongoing &
+STT ON, meeting ongoing &
 User speaks &
 Node created with correct tag. \\
-\midrule
+
 Add Custom Node &
 System adds node from manual input &
 Agenda map displayed &
 Enter text and press ``+'' &
 New node appears on map. \\
-\midrule
+
 Node Dragging &
 Users can reposition nodes &
 Map displayed &
 Drag a node &
 Node moves to new position. \\
-\midrule
+
 Canvas Panning &
 Move entire map &
 Map displayed &
 Click empty canvas and drag &
 Map pans accordingly. \\
-\midrule
+
 View Node Details &
 Display full STT transcript and timestamp &
 Node exists &
 Click on a node &
-Tooltip or overlay near node displays transcript. \\
-\midrule
+Tooltip/overlay near node displays transcript. \\
+
 Manage Decisions \& Action Items &
 Cards editable &
 Cards appear in right panel &
 Click card &
 Options to edit/delete/reorder appear. \\
-\midrule
+
 End Meeting &
 System generates summary &
-Meeting active, Screen~5 shown &
+Meeting active &
 Click ``End Meeting'' &
-Navigate to Screen~6 (Meeting Summary Report). \\
-\midrule
+Navigate to Screen~6. \\
+
 View Final Agenda Map &
 System displays saved map &
 Screen~6 loaded &
 None &
 Final map shown, draggable/zoomable. \\
-\midrule
+
 Timeline Interaction &
 Highlight related nodes &
 Timeline displayed &
 Click topic on timeline &
 Matching nodes are highlighted. \\
-\midrule
+
 Complete Process &
 System returns to main &
 Summary displayed &
 Click ``Return to Main'' &
 Navigate back to Screen~2. \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table*}
 
-\section{Discussion}
+\section{Appendix}
 
-When the project first began, the team focused exclusively on developing features related to presentations. However, midway through the semester, the possibility of integrating the system with LG's smart office ecosystem arose, requiring the introduction of meeting-support functionalities and significantly shifting the overall project direction. This transition forced the team to rethink how the presentation and meeting stages could operate not as separate modules but as a single coherent workflow. Determining how data should transition smoothly from real-time teleprompter mode to meeting analysis---while still preserving the features originally designed for presentations---was one of the most complex challenges faced. Considerable time was spent evaluating architectural options, revising user flow designs, and ensuring that newly added meeting components did not conflict with or overly complicate the existing presentation pipeline.
-
-Another major difficulty stemmed from subtle but important differences in how each team member envisioned the system. Although the high-level concept seemed aligned, expectations regarding UI behavior, API boundaries, and real-time synchronization often diverged. As a result, every team meeting required deliberate coordination to clarify assumptions, unify interpretations, and adjust the design accordingly. This iterative process consumed more time than expected, but it ultimately led to a more consistent system architecture and strengthened the team's ability to collaborate effectively.
-
-Overall, the project challenged the team to adapt to evolving requirements, redesign the architecture under real-world constraints, and continuously refine communication strategies. These experiences offered meaningful insight into practical software development, where feature expansion, integration complexity, and team alignment are recurring and essential aspects of the engineering process.
-
-\section*{Appendix}
-
-\subsection*{Open-Source Licences and Attributions}
-
-The FoS project uses Figma Make UI components and styles under the MIT License; notices and attributions for Figma Make and other third-party resources are maintained in:
-
+\subsection{Open-Source Licences and Attributions}
+The FoS project uses Figma Make UI components and styles under the MIT License, as well as notices and attributions for Figma Make and other third-party resources:
 \begin{itemize}
-\item \verb|source/src/Attributions.md|
-\item \verb|source/src/index.css|
+  \item \texttt{source/src/Attributions.md}
+  \item \texttt{source/src/index.css}
 \end{itemize}
 
 \end{document}
