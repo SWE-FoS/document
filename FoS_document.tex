@@ -64,9 +64,11 @@ jmh12230@hanyang.ac.kr}
 
 \maketitle
 
+\IEEEpubid{XXX-X-XXXX-XXXX-X/XX/\$XX.00~\copyright~2025 IEEE}
+
 \begin{center}
 Potato Savior\\[2pt]
-\url{https://github.com/april2901/ai-assistant-for-presentation}
+\url{https://github.com/SWE-FoS}
 \end{center}
 
 \begin{abstract}
@@ -87,7 +89,7 @@ Speech Recognition, Real-Time STT, Script Synchronization, Real-Time Teleprompte
                                   >{\raggedright\arraybackslash}p{2.0cm}%
                                   >{\raggedright\arraybackslash}X}
 \toprule
-\textbf{Role} & \textbf{Name} & \textbf{Task description and etc.} \\
+Role & Name & Task description and etc. \\
 \midrule
 User & Daeun Lee, Minhyuk Jang &
 Tests the prototype from the user's perspective, focusing on interface usability, speech synchronization accuracy, and overall user experience. Provides qualitative feedback for refinement. \\
@@ -543,9 +545,9 @@ The project adopts a web-based client--server architecture as its primary develo
 
 \subsubsection{Programming Languages and Rationale}
 
-\textbf{Backend:} Node.js--based API Routes are used to handle REST APIs and real-time communication (e.g., WebSocket or streaming endpoints). Node.js provides a non-blocking, event-driven runtime that is well suited for real-time applications such as teleprompters and meeting assistants. It also enables tight integration with the React frontend and offers a rich JavaScript/TypeScript ecosystem for calling external AI services (e.g., STT APIs and LLM APIs) and managing asynchronous workflows.
+Backend: Node.js--based API Routes are used to handle REST APIs and real-time communication (e.g., WebSocket or streaming endpoints). Node.js provides a non-blocking, event-driven runtime that is well suited for real-time applications such as teleprompters and meeting assistants. It also enables tight integration with the React frontend and offers a rich JavaScript/TypeScript ecosystem for calling external AI services (e.g., STT APIs and LLM APIs) and managing asynchronous workflows.
 
-\textbf{Frontend:} TypeScript/JavaScript (Node.js 20 or higher) with React~18.2. JavaScript is the only natively supported browser language and is indispensable for client-side interaction. React combined with TypeScript supports modular, maintainable UI components and ensures type safety.
+Frontend: TypeScript/JavaScript (Node.js 20 or higher) with React~18.2. JavaScript is the only natively supported browser language and is indispensable for client-side interaction. React combined with TypeScript supports modular, maintainable UI components and ensures type safety.
 
 \subsubsection{Cost Estimation}
 
@@ -595,7 +597,7 @@ These benchmarks highlight the project's improvements in real-time adaptivity an
                                   >{\raggedright\arraybackslash}p{2.2cm}%
                                   >{\raggedright\arraybackslash}X}
 \toprule
-\textbf{Role} & \textbf{Members} & \textbf{Responsibilities} \\
+Role & Members & Responsibilities \\
 \midrule
 Backend Development &
 Sangyoon Kwon, Dohoon Kim &
@@ -743,7 +745,7 @@ The third module is the Data \& AI Service layer. Through Supabase, the backend 
 \renewcommand{\arraystretch}{1.1}
 \begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{2.8cm}X}
 \toprule
-\textbf{Directory} & \textbf{Main files} \\
+Directory & Main files \\
 \midrule
 \verb|fos/frontend/src| & \verb|App.tsx|, \verb|Attributions.md|, \verb|index.css|, \verb|main.tsx|, \verb|vite-env.d.ts| \\
 \verb|fos/frontend/src/assets| & \verb|favicon.png|, \verb|FOS_Logo.png|, \verb|google_logo.png|, \verb|kakao_logo.png| \\
@@ -806,69 +808,186 @@ The system consists of six core screens, each representing a key stage in the us
 \item Screen 6. Meeting Summary Report -- Displays the final agenda map, decisions, action items, and a chronological timeline of the meeting.
 \end{itemize}
 
-\subsection{Initial Functional Test Case Table (Excerpt)}
-
-Table~\ref{tab:testcases} shows an excerpt of the functional test cases.  
-(The full table in the original documentation is longer; only representative entries are shown here to fit the page limit.)
+\subsection{Initial Functional Test Case Table}
 
 \begin{table*}[!t]
 \centering
-\caption{Initial functional test cases (excerpt)}
+\caption{Initial functional test cases}
 \label{tab:testcases}
 \renewcommand{\arraystretch}{1.1}
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.8cm}%
                                 >{\raggedright\arraybackslash}p{2.0cm}%
-                                >{\raggedright\arraybackslash}p{2.4cm}%
+                                >{\raggedright\arraybackslash}p{2.6cm}%
                                 >{\raggedright\arraybackslash}p{3.0cm}X}
 \toprule
-\textbf{Use Case} & \textbf{Function tested} & \textbf{Initial state} & \textbf{Input} & \textbf{Expected output} \\
+Use Case & Function tested & Initial system state & Input & Expected output \\
 \midrule
 User Login (valid) &
 System authenticates user and opens main dashboard &
 User is on Login Screen, not authenticated &
-User enters valid email and password, then clicks login &
+User enters valid email and password, clicks a login button &
 User is authenticated and Screen~2 (Main Dashboard) is displayed. \\
 \midrule
 User Login (invalid) &
 System rejects invalid credentials &
 User is on Login Screen, not authenticated &
-User enters invalid email or password, then clicks login &
+User enters invalid email or password, clicks a login button &
 Login fails, an error message is shown, and the user stays on the Login Screen. \\
 \midrule
 Navigate to Presentation Prep &
-Routing to Screen~3 &
+System routes to Screen~3 &
 User authenticated, on Screen~2 &
 Click ``Prepare for Presentation'' &
-System navigates to Screen~3 (Presentation Preparation Screen). \\
+Navigate to Screen~3. \\
 \midrule
 Start Meeting Immediately &
-Routing to Screen~5 &
+System routes to Screen~5 &
 User authenticated, on Screen~2 &
 Click ``Start Meeting'' &
-System navigates to Screen~5 with an empty agenda map. \\
+Navigate to Screen~5 with empty Agenda Map. \\
+\midrule
+Enter Presentation Title &
+System accepts title input &
+Screen~3 loaded &
+Enter text in title field &
+Title saved in preparation state. \\
+\midrule
+Enter Script &
+Script is captured and character count calculated &
+Script field empty &
+Type script content &
+Estimated time updates in real time. \\
+\midrule
+Upload Slides &
+System accepts ppt/pdf file &
+No file uploaded &
+Upload a valid ppt/pdf &
+Slides preview shown; auto-matching enabled. \\
+\midrule
+Auto Script--Slide Matching &
+System matches script segments to slide pages &
+Script + slides both provided &
+Click ``Auto-Match'' &
+Slide--script mapping is generated. \\
+\midrule
+Begin Presentation &
+System navigates to Screen~4 &
+Inputs complete &
+Click ``Start Presentation'' &
+Navigate to Screen~4. \\
 \midrule
 Start Teleprompter &
-STT and highlighting start &
+STT begins and script highlighting activates &
 Screen~4 loaded, STT off &
 Click ``Start'' &
-STT is activated and real-time highlighting begins. \\
+STT activated, real-time highlighting begins. \\
+\midrule
+Pause Teleprompter &
+STT pauses &
+Teleprompter running &
+Click ``Pause'' &
+Highlight freezes; STT stops listening. \\
+\midrule
+Auto Slide Advance &
+Slide moves based on script progression &
+STT running &
+Speak script matching slide threshold &
+Slide auto-advance triggered. \\
+\midrule
+Volume \& Speed Monitoring &
+Dashboard displays metrics &
+Teleprompter active &
+Speak out loud &
+Volume level and speaking speed update dynamically. \\
+\midrule
+End Presentation &
+Presentation ends and modal opens &
+Teleprompter active &
+Click ``End Presentation'' &
+Screen~4-2 modal appears. \\
+\midrule
+Start Follow-Up Meeting &
+Modal transitions to Screen~5 &
+Modal displayed &
+Click ``Start Follow-Up Meeting'' &
+Navigate to Screen~5 with auto-generated initial Agenda Map from presentation content. \\
+\midrule
+Return to Main &
+Back to Screen~2 &
+Modal displayed &
+Click ``Finish'' &
+Navigate to Screen~2. \\
+\midrule
+Real-Time STT Categorization &
+System tags utterances (Idea, Decision, etc.) &
+STT on, meeting ongoing &
+User speaks &
+Node created with correct tag. \\
+\midrule
+Add Custom Node &
+System adds node from manual input &
+Agenda map displayed &
+Enter text and press ``+'' &
+New node appears on map. \\
+\midrule
+Node Dragging &
+Users can reposition nodes &
+Map displayed &
+Drag a node &
+Node moves to new position. \\
+\midrule
+Canvas Panning &
+Move entire map &
+Map displayed &
+Click empty canvas and drag &
+Map pans accordingly. \\
+\midrule
+View Node Details &
+Display full STT transcript and timestamp &
+Node exists &
+Click on a node &
+Tooltip or overlay near node displays transcript. \\
+\midrule
+Manage Decisions \& Action Items &
+Cards editable &
+Cards appear in right panel &
+Click card &
+Options to edit/delete/reorder appear. \\
 \midrule
 End Meeting &
-Summary generation and navigation &
+System generates summary &
 Meeting active, Screen~5 shown &
 Click ``End Meeting'' &
-System navigates to Screen~6 (Meeting Summary Report) and displays the final agenda map and timelines. \\
+Navigate to Screen~6 (Meeting Summary Report). \\
+\midrule
+View Final Agenda Map &
+System displays saved map &
+Screen~6 loaded &
+None &
+Final map shown, draggable/zoomable. \\
+\midrule
+Timeline Interaction &
+Highlight related nodes &
+Timeline displayed &
+Click topic on timeline &
+Matching nodes are highlighted. \\
+\midrule
+Complete Process &
+System returns to main &
+Summary displayed &
+Click ``Return to Main'' &
+Navigate back to Screen~2. \\
 \bottomrule
 \end{tabularx}
 \end{table*}
 
 \section{Discussion}
 
-When the project first began, our team focused exclusively on developing features related to presentations. However, midway through the semester, the possibility of integrating our system with LG's smart office ecosystem arose, requiring us to introduce meeting-support functionalities and significantly shift our overall project direction. This transition forced us to rethink how the presentation and meeting stages could operate not as separate modules but as a single coherent workflow. Determining how data should transition smoothly from real-time teleprompter mode to meeting analysis---while still preserving the features originally designed for presentations---was one of the most complex challenges we faced. We spent substantial time evaluating architectural options, revising user flow designs, and ensuring that newly added meeting components did not conflict with or overly complicate the existing presentation pipeline.
+When the project first began, the team focused exclusively on developing features related to presentations. However, midway through the semester, the possibility of integrating the system with LG's smart office ecosystem arose, requiring the introduction of meeting-support functionalities and significantly shifting the overall project direction. This transition forced the team to rethink how the presentation and meeting stages could operate not as separate modules but as a single coherent workflow. Determining how data should transition smoothly from real-time teleprompter mode to meeting analysis---while still preserving the features originally designed for presentations---was one of the most complex challenges faced. Considerable time was spent evaluating architectural options, revising user flow designs, and ensuring that newly added meeting components did not conflict with or overly complicate the existing presentation pipeline.
 
-Another major difficulty stemmed from subtle but important differences in how each team member envisioned the system. Although the high-level concept seemed aligned, our expectations regarding UI behavior, API boundaries, and real-time synchronization often diverged. As a result, every team meeting required deliberate coordination to clarify assumptions, unify interpretations, and adjust the design accordingly. This iterative process consumed more time than expected, but it ultimately led to a more consistent system architecture and strengthened our ability to collaborate effectively.
+Another major difficulty stemmed from subtle but important differences in how each team member envisioned the system. Although the high-level concept seemed aligned, expectations regarding UI behavior, API boundaries, and real-time synchronization often diverged. As a result, every team meeting required deliberate coordination to clarify assumptions, unify interpretations, and adjust the design accordingly. This iterative process consumed more time than expected, but it ultimately led to a more consistent system architecture and strengthened the team's ability to collaborate effectively.
 
-Overall, the project challenged us to adapt to evolving requirements, redesign the architecture under real-world constraints, and continuously refine our communication strategies. These experiences offered meaningful insight into practical software development, where feature expansion, integration complexity, and team alignment are recurring and essential aspects of the engineering process.
+Overall, the project challenged the team to adapt to evolving requirements, redesign the architecture under real-world constraints, and continuously refine communication strategies. These experiences offered meaningful insight into practical software development, where feature expansion, integration complexity, and team alignment are recurring and essential aspects of the engineering process.
 
 \section*{Appendix}
 
